@@ -193,6 +193,7 @@ def onboard():
     console.print("\nNext steps:")
     console.print("  1. Add your API key to [cyan]~/.nanobot/config.json[/cyan]")
     console.print("     Get one at: https://openrouter.ai/keys")
+    console.print("     [dim]Or use Claude Code CLI: [cyan]claude setup-token[/cyan] (no API key needed)[/dim]")
     console.print("  2. Chat: [cyan]nanobot agent -m \"Hello!\"[/cyan]")
     console.print("\n[dim]Want Telegram/WhatsApp? See: https://github.com/HKUDS/nanobot#-chat-apps[/dim]")
 
