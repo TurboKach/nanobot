@@ -248,6 +248,19 @@ def _make_provider(config: Config):
     if provider_name == "openai_codex" or model.startswith("openai-codex/"):
         return OpenAICodexProvider(default_model=model)
 
+    # Claude Code CLI (OAuth)
+    if provider_name == "claude_code" or model.startswith("claude-code/"):
+        from nanobot.providers.claude_code_auth import get_claude_code_token
+        from nanobot.providers.claude_code_provider import ClaudeCodeProvider
+
+        oauth_token = get_claude_code_token()
+        if oauth_token:
+            cc_model = config.providers.claude_code.model or model
+            return ClaudeCodeProvider(oauth_token=oauth_token, default_model=cc_model)
+        console.print("[red]Error: CLAUDE_CODE_OAUTH_TOKEN not set.[/red]")
+        console.print("  Run [cyan]claude setup-token[/cyan] and export the token.")
+        raise typer.Exit(1)
+
     # Custom: direct OpenAI-compatible endpoint, bypasses LiteLLM
     if provider_name == "custom":
         return CustomProvider(
@@ -1062,6 +1075,17 @@ def status():
             else:
                 has_key = bool(p.api_key)
                 console.print(f"{spec.label}: {'[green]✓[/green]' if has_key else '[dim]not set[/dim]'}")
+
+        # MCP servers
+        mcp_servers = config.tools.mcp_servers
+        if mcp_servers:
+            console.print()
+            console.print(f"MCP Servers: {len(mcp_servers)}")
+            for name, cfg in mcp_servers.items():
+                if cfg.command:
+                    console.print(f"  [green]●[/green] {name} [dim]({cfg.command} {' '.join(cfg.args)})[/dim]")
+                elif cfg.url:
+                    console.print(f"  [green]●[/green] {name} [dim]({cfg.url})[/dim]")
 
 
 # ============================================================================

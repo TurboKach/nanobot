@@ -156,10 +156,12 @@ class AgentLoop:
 
     @staticmethod
     def _strip_think(text: str | None) -> str | None:
-        """Remove <think>…</think> blocks that some models embed in content."""
+        """Remove <think>…</think> and <internal>…</internal> blocks from content."""
         if not text:
             return None
-        return re.sub(r"<think>[\s\S]*?</think>", "", text).strip() or None
+        text = re.sub(r"<think>[\s\S]*?</think>", "", text)
+        text = re.sub(r"<internal>[\s\S]*?</internal>", "", text)
+        return text.strip() or None
 
     @staticmethod
     def _tool_hint(tool_calls: list) -> str:
