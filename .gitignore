@@ -1,5 +1,6 @@
 .assets
 .env
+.mcp.json
 *.pyc
 dist/
 build/

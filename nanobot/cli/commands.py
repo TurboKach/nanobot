@@ -1076,6 +1076,17 @@ def status():
                 has_key = bool(p.api_key)
                 console.print(f"{spec.label}: {'[green]✓[/green]' if has_key else '[dim]not set[/dim]'}")
 
+        # MCP servers
+        mcp_servers = config.tools.mcp_servers
+        if mcp_servers:
+            console.print()
+            console.print(f"MCP Servers: {len(mcp_servers)}")
+            for name, cfg in mcp_servers.items():
+                if cfg.command:
+                    console.print(f"  [green]●[/green] {name} [dim]({cfg.command} {' '.join(cfg.args)})[/dim]")
+                elif cfg.url:
+                    console.print(f"  [green]●[/green] {name} [dim]({cfg.url})[/dim]")
+
 
 # ============================================================================
 # OAuth Login
